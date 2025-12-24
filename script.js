@@ -54,19 +54,6 @@ function initPerformanceOptimizations() {
             img.src = img.dataset.src;
         });
     }
-    
-    // Preload critical resources
-    const preloadLinks = [
-        'https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600&family=Playfair+Display:wght@400;500;600;700;800;900&family=Cinzel:wght@400;500;600;700;800;900&display=swap'
-    ];
-    
-    preloadLinks.forEach(href => {
-        const link = document.createElement('link');
-        link.rel = 'preload';
-        link.as = 'style';
-        link.href = href;
-        document.head.appendChild(link);
-    });
 }
 
 // ===================================
@@ -835,6 +822,8 @@ function initSkillBars() {
 // ===================================
 function initContactForm() {
     const form = document.getElementById('contactForm');
+    if (!form) return;
+    
     const submitBtn = form.querySelector('button[type="submit"]');
     const inputs = form.querySelectorAll('input, textarea');
     
@@ -906,7 +895,7 @@ function initContactForm() {
         return emailRegex.test(email);
     }
     
-    // Form submission with loading state
+    // Form submission - sends to Google Apps Script
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
         
@@ -937,20 +926,22 @@ function initContactForm() {
         };
         
         try {
-            // Simulate API call
-            await new Promise(resolve => setTimeout(resolve, 2000));
+            // Send to Google Apps Script
+            const response = await fetch('https://script.google.com/macros/s/AKfycbyoakGyDknrnedybEAMke2qcgCF1UnXp-4IY1MvJL-AgXyuVeS37TRLp8S6rTcv8Nys/exec', {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData)
+            });
             
-            // Show success message
-            showNotification('Thank you for your message! I will get back to you soon.', 'success');
-            
-            // Reset form
+            // Show success (no-cors doesn't return response, so we assume success)
+            showNotification('Thank you! Your message has been sent successfully.', 'success');
             form.reset();
             
-            // In a real application, you would send this data to a server
-            console.log('Form submitted:', formData);
-            
         } catch (error) {
-            showNotification('Sorry, there was an error sending your message. Please try again.', 'error');
+            showNotification('Sorry, there was an error. Please try again.', 'error');
         } finally {
             // Reset button state
             submitBtn.classList.remove('loading');
