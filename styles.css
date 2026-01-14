@@ -3312,3 +3312,293 @@ body.theme-kids .hero-portrait {
 body.theme-kids .scroll-indicator {
   animation: bounce 2s infinite !important;
 }
+
+/* ===================================
+   BRICKS & BITS COMPANY SHOWCASE
+   =================================== */
+.company-showcase {
+    background: var(--subtle-cream);
+    padding: 6rem 0;
+}
+
+.company-card-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem 0;
+}
+
+.company-card {
+    background: var(--white);
+    border-radius: 30px;
+    padding: 4rem 3rem;
+    max-width: 800px;
+    text-align: center;
+    box-shadow: 0 10px 50px var(--shadow-medium);
+    border: 2px solid var(--royal-gold);
+    position: relative;
+    overflow: hidden;
+    transition: var(--transition);
+}
+
+.company-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(212, 175, 55, 0.1) 0%, transparent 70%);
+    animation: rotate 20s linear infinite;
+}
+
+.company-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 70px var(--shadow-gold);
+}
+
+.company-icon {
+    width: 120px;
+    height: 120px;
+    background: linear-gradient(135deg, var(--royal-gold), var(--gold-hover));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 2rem;
+    box-shadow: 0 10px 40px var(--shadow-gold);
+    position: relative;
+    z-index: 1;
+    animation: float 4s ease-in-out infinite;
+}
+
+.company-icon i {
+    color: var(--white);
+    width: 60px;
+    height: 60px;
+    stroke-width: 2;
+}
+
+.company-card h3 {
+    font-family: var(--font-elegant);
+    font-size: 2.5rem;
+    color: var(--deep-charcoal);
+    margin-bottom: 0.5rem;
+    position: relative;
+    z-index: 1;
+}
+
+.company-card .company-tagline {
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    color: var(--royal-gold);
+    margin-bottom: 1.5rem;
+    position: relative;
+    z-index: 1;
+}
+
+.company-card .company-description {
+    color: #666;
+    font-size: 1rem;
+    line-height: 1.8;
+    margin-bottom: 2rem;
+    position: relative;
+    z-index: 1;
+}
+
+.company-features-grid {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
+}
+
+.feature-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem;
+    background: var(--subtle-cream);
+    border-radius: 15px;
+    min-width: 120px;
+    transition: var(--transition);
+    border: 2px solid transparent;
+}
+
+.feature-item:hover {
+    transform: translateY(-5px);
+    border-color: var(--royal-gold);
+    background: var(--white);
+    box-shadow: 0 8px 25px var(--shadow-medium);
+}
+
+.feature-item i {
+    color: var(--royal-gold);
+    width: 24px;
+    height: 24px;
+}
+
+.feature-item span {
+    font-weight: 600;
+    color: var(--deep-charcoal);
+    font-size: 0.85rem;
+    text-align: center;
+}
+
+.btn-company {
+    background: linear-gradient(135deg, var(--royal-gold), var(--gold-hover));
+    color: var(--white);
+    border: none;
+    padding: 1rem 2.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 50px;
+    box-shadow: 0 8px 25px var(--shadow-gold);
+    position: relative;
+    z-index: 1;
+}
+
+.btn-company:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 15px 45px var(--shadow-gold);
+}
+
+.btn-company i {
+    flex-shrink: 0;
+}
+
+.btn-company i:first-child {
+    width: 24px;
+    height: 24px;
+}
+
+.btn-company i:last-child {
+    width: 18px;
+    height: 18px;
+}
+
+/* Responsive - Company Showcase */
+@media (max-width: 768px) {
+    .company-showcase {
+        padding: 4rem 0;
+    }
+    
+    .company-card {
+        padding: 3rem 2rem;
+    }
+    
+    .company-card h3 {
+        font-size: 2rem;
+    }
+    
+    .company-icon {
+        width: 100px;
+        height: 100px;
+    }
+    
+    .company-icon i {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .company-features-grid {
+        gap: 1rem;
+    }
+    
+    .feature-item {
+        min-width: 100px;
+        padding: 0.8rem;
+    }
+    
+    .feature-item span {
+        font-size: 0.75rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .company-card {
+        padding: 2.5rem 1.5rem;
+    }
+    
+    .company-card h3 {
+        font-size: 1.6rem;
+    }
+    
+    .company-card .company-description {
+        font-size: 0.95rem;
+    }
+    
+    .company-features-grid {
+        gap: 0.8rem;
+    }
+    
+    .feature-item {
+        min-width: 90px;
+        padding: 0.6rem;
+    }
+    
+    .btn-company {
+        width: 100%;
+        padding: 1rem 2rem;
+    }
+}
+
+/* Responsive - Company Showcase */
+@media (max-width: 968px) {
+    .company-features {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .company-name {
+        font-size: 3rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .company-showcase {
+        padding: 5rem 0;
+    }
+    
+    .company-name {
+        font-size: 2.5rem;
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+    
+    .company-name .ampersand {
+        font-size: 2rem;
+    }
+    
+    .company-features {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .company-badge {
+        width: 150px;
+        height: 150px;
+    }
+    
+    .badge-icon {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .badge-icon i {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .company-tagline {
+        font-size: 1.2rem;
+    }
+    
+    .role-title {
+        font-size: 1.1rem;
+        text-align: center;
+    }
+}

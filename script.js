@@ -1428,3 +1428,209 @@ document.addEventListener('DOMContentLoaded', () => {
         initCertificateViewer();
     }
 });
+
+
+// ===================================
+// BRICKS & BITS COMPANY CANVAS ANIMATION
+// ===================================
+function initCompanyCanvas() {
+    const canvas = document.getElementById('companyCanvas');
+    if (!canvas) return;
+    
+    const ctx = canvas.getContext('2d');
+    
+    // Theme colors
+    const royalGold = '#D4AF37';
+    const goldLight = '#E8D7A0';
+    const goldHover = '#C5A028';
+    
+    function resizeCanvas() {
+        const section = canvas.parentElement;
+        canvas.width = section.offsetWidth;
+        canvas.height = section.offsetHeight;
+    }
+    
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+    
+    // Brick particles
+    const bricks = [];
+    const brickCount = 30;
+    
+    // Binary/digital particles (for "Bits")
+    const bits = [];
+    const bitCount = 50;
+    
+    // Connection lines
+    const connections = [];
+    
+    class Brick {
+        constructor() {
+            this.reset();
+        }
+        
+        reset() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.width = Math.random() * 40 + 20;
+            this.height = this.width * 0.5;
+            this.speedX = (Math.random() - 0.5) * 0.5;
+            this.speedY = (Math.random() - 0.5) * 0.5;
+            this.rotation = Math.random() * Math.PI * 2;
+            this.rotationSpeed = (Math.random() - 0.5) * 0.02;
+            this.opacity = Math.random() * 0.3 + 0.1;
+        }
+        
+        update() {
+            this.x += this.speedX;
+            this.y += this.speedY;
+            this.rotation += this.rotationSpeed;
+            
+            // Wrap around screen
+            if (this.x < -50) this.x = canvas.width + 50;
+            if (this.x > canvas.width + 50) this.x = -50;
+            if (this.y < -50) this.y = canvas.height + 50;
+            if (this.y > canvas.height + 50) this.y = -50;
+        }
+        
+        draw() {
+            ctx.save();
+            ctx.translate(this.x, this.y);
+            ctx.rotate(this.rotation);
+            ctx.globalAlpha = this.opacity;
+            
+            // Brick gradient - using theme gold colors
+            const gradient = ctx.createLinearGradient(-this.width/2, -this.height/2, this.width/2, this.height/2);
+            gradient.addColorStop(0, royalGold);
+            gradient.addColorStop(1, goldHover);
+            
+            ctx.fillStyle = gradient;
+            ctx.fillRect(-this.width/2, -this.height/2, this.width, this.height);
+            
+            // Brick lines
+            ctx.strokeStyle = 'rgba(0, 0, 0, 0.3)';
+            ctx.lineWidth = 1;
+            ctx.strokeRect(-this.width/2, -this.height/2, this.width, this.height);
+            
+            ctx.restore();
+        }
+    }
+    
+    class Bit {
+        constructor() {
+            this.reset();
+        }
+        
+        reset() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.value = Math.random() > 0.5 ? '1' : '0';
+            this.size = Math.random() * 14 + 10;
+            this.speedY = Math.random() * 0.5 + 0.2;
+            this.opacity = Math.random() * 0.5 + 0.2;
+            this.pulse = Math.random() * Math.PI * 2;
+        }
+        
+        update() {
+            this.y += this.speedY;
+            this.pulse += 0.05;
+            
+            // Reset when off screen
+            if (this.y > canvas.height + 20) {
+                this.y = -20;
+                this.x = Math.random() * canvas.width;
+            }
+        }
+        
+        draw() {
+            ctx.save();
+            ctx.globalAlpha = this.opacity * (0.5 + Math.sin(this.pulse) * 0.5);
+            ctx.font = `${this.size}px monospace`;
+            ctx.fillStyle = goldLight;
+            ctx.shadowColor = royalGold;
+            ctx.shadowBlur = 10;
+            ctx.fillText(this.value, this.x, this.y);
+            ctx.restore();
+        }
+    }
+    
+    // Initialize particles
+    for (let i = 0; i < brickCount; i++) {
+        bricks.push(new Brick());
+    }
+    
+    for (let i = 0; i < bitCount; i++) {
+        bits.push(new Bit());
+    }
+    
+    // Draw connections between nearby bricks
+    function drawConnections() {
+        for (let i = 0; i < bricks.length; i++) {
+            for (let j = i + 1; j < bricks.length; j++) {
+                const dx = bricks[i].x - bricks[j].x;
+                const dy = bricks[i].y - bricks[j].y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                
+                if (distance < 150) {
+                    ctx.beginPath();
+                    ctx.moveTo(bricks[i].x, bricks[i].y);
+                    ctx.lineTo(bricks[j].x, bricks[j].y);
+                    ctx.strokeStyle = `rgba(212, 175, 55, ${0.15 * (1 - distance / 150)})`;
+                    ctx.lineWidth = 1;
+                    ctx.stroke();
+                }
+            }
+        }
+    }
+    
+    // Animation loop
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // Draw connections
+        drawConnections();
+        
+        // Update and draw bricks
+        bricks.forEach(brick => {
+            brick.update();
+            brick.draw();
+        });
+        
+        // Update and draw bits
+        bits.forEach(bit => {
+            bit.update();
+            bit.draw();
+        });
+        
+        requestAnimationFrame(animate);
+    }
+    
+    animate();
+    
+    // Mouse interaction
+    let mouse = { x: null, y: null };
+    
+    canvas.parentElement.addEventListener('mousemove', (e) => {
+        const rect = canvas.getBoundingClientRect();
+        mouse.x = e.clientX - rect.left;
+        mouse.y = e.clientY - rect.top;
+        
+        // Push bricks away from mouse
+        bricks.forEach(brick => {
+            const dx = brick.x - mouse.x;
+            const dy = brick.y - mouse.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            
+            if (distance < 100) {
+                const force = (100 - distance) / 100;
+                brick.x += (dx / distance) * force * 3;
+                brick.y += (dy / distance) * force * 3;
+            }
+        });
+    });
+}
+
+// Initialize company canvas when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+    initCompanyCanvas();
+});
